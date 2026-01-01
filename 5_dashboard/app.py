@@ -808,9 +808,8 @@ def update_critical_paths(topology, metric, top_k):
     rows = []
     for i, path_data in enumerate(paths, 1):
         path = path_data['path']
-        path_str = " → ".join(map(str, path[:5]))
-        if len(path) > 5:
-            path_str += f" → ... → {path[-1]}"
+        # Afficher le chemin COMPLET en une seule ligne ou multiple selon la longueur
+        path_str = " → ".join(map(str, path))
         
         metric_value = path_data.get(metric, path_data.get('mean_risk', 0))
         max_risk = path_data.get('max_risk', 0)
@@ -831,11 +830,25 @@ def update_critical_paths(topology, metric, top_k):
                     'color': 'white',
                     'backgroundColor': COLORS['primary'],
                     'padding': '12px',
-                    'borderRadius': '6px'
+                    'borderRadius': '6px',
+                    'minWidth': '50px'
                 }),
-                html.Td(path_str, style={
-                    'fontFamily': 'monospace',
-                    'fontSize': '13px',
+                html.Td([
+                    html.Div(f"Chemin {i}: {len(path)} nœuds", 
+                            style={'fontWeight': 'bold', 'marginBottom': '8px', 'color': '#333'}),
+                    html.Code(path_str, style={
+                        'fontFamily': 'monospace',
+                        'fontSize': '12px',
+                        'padding': '10px',
+                        'backgroundColor': '#f5f5f5',
+                        'borderRadius': '4px',
+                        'display': 'block',
+                        'wordBreak': 'break-all',
+                        'whiteSpace': 'pre-wrap',
+                        'color': '#333',
+                        'border': '1px solid #ddd'
+                    })
+                ], style={
                     'padding': '12px',
                     'color': '#333'
                 }),
