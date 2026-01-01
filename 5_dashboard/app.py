@@ -10,16 +10,39 @@ import pandas as pd
 import json
 from pathlib import Path
 import numpy as np
+import sys
 
 # Configuration
 BASE_DIR = Path(__file__).parent.parent
 RESULTS_DIR = BASE_DIR / "results"
+ANALYSIS_DIR = BASE_DIR / "4_analysis"
+
+# Ajouter le répertoire analysis au path pour importer le module
+sys.path.insert(0, str(ANALYSIS_DIR))
+
+# Importer le générateur de carte des chemins à risque
+try:
+    from critical_paths_map_generator import get_critical_paths_figures
+    CRITICAL_PATHS_MAP_AVAILABLE = True
+    print("[*] Module critical_paths_map_generator importé avec succès")
+except ImportError as e:
+    CRITICAL_PATHS_MAP_AVAILABLE = False
+    print(f"[!] Avertissement: {e}")
 
 # Charger les données
 print("[*] Chargement des données...")
 results_df = pd.read_csv(RESULTS_DIR / "analysis_summary.csv")
 with open(RESULTS_DIR / "critical_paths.json") as f:
     critical_paths = json.load(f)
+
+# Charger les figures de la carte si disponibles
+if CRITICAL_PATHS_MAP_AVAILABLE:
+    try:
+        critical_paths_figures = get_critical_paths_figures()
+        print("[✓] Figures de la carte des chemins chargées")
+    except Exception as e:
+        print(f"[!] Erreur lors du chargement des figures: {e}")
+        CRITICAL_PATHS_MAP_AVAILABLE = False
 
 print(f"[✓] {len(results_df)} topologies chargées")
 
@@ -275,7 +298,134 @@ app.layout = html.Div([
                 html.Div([
                     dcc.Graph(id='correlation-plot')
                 ], style={'marginTop': '20px'})
-            ], style={'padding': '20px'})
+            ], style={'padding': '20px'}),
+            
+            # TAB 4: Carte des Chemins à Risque
+            dcc.Tab(label='🗺️ Carte des Chemins', value='tab-4', children=[
+                html.Div([
+                    html.Div([
+                        html.H3("📊 Carte Interactive des Chemins à Risque", 
+                               style={'color': '#263238', 'marginBottom': '20px'}),
+                        html.P("Visualisation complète des chemins critiques identifiés par le modèle GNN.",
+                              style={'color': '#666', 'marginBottom': '20px'}),
+                    ], style={
+                        'background': 'white',
+                        'padding': '20px',
+                        'borderRadius': '12px',
+                        'boxShadow': '0 2px 8px rgba(0,0,0,0.08)',
+                        'marginBottom': '20px'
+                    }),
+                    
+                    # Grille des stats de la carte
+                    html.Div([
+                        html.Div([
+                            html.Div([
+                                html.Div("🔴", style={'fontSize': '24px', 'marginBottom': '5px'}),
+                                html.Div("Chemins Critiques", style={'fontSize': '12px', 'color': '#666'}),
+                                html.Div(id='map-critical-count', style={
+                                    'fontSize': '24px', 
+                                    'fontWeight': 'bold', 
+                                    'color': '#d32f2f',
+                                    'marginTop': '8px'
+                                })
+                            ], style={
+                                'background': 'white',
+                                'padding': '20px',
+                                'borderRadius': '8px',
+                                'textAlign': 'center',
+                                'borderLeft': '4px solid #d32f2f'
+                            })
+                        ], style={'flex': '1', 'marginRight': '10px'}),
+                        
+                        html.Div([
+                            html.Div([
+                                html.Div("🟡", style={'fontSize': '24px', 'marginBottom': '5px'}),
+                                html.Div("Chemins Modérés", style={'fontSize': '12px', 'color': '#666'}),
+                                html.Div(id='map-moderate-count', style={
+                                    'fontSize': '24px', 
+                                    'fontWeight': 'bold', 
+                                    'color': '#ff9800',
+                                    'marginTop': '8px'
+                                })
+                            ], style={
+                                'background': 'white',
+                                'padding': '20px',
+                                'borderRadius': '8px',
+                                'textAlign': 'center',
+                                'borderLeft': '4px solid #ff9800'
+                            })
+                        ], style={'flex': '1', 'marginRight': '10px', 'marginLeft': '10px'}),
+                        
+                        html.Div([
+                            html.Div([
+                                html.Div("🟢", style={'fontSize': '24px', 'marginBottom': '5px'}),
+                                html.Div("Chemins Stables", style={'fontSize': '12px', 'color': '#666'}),
+                                html.Div(id='map-stable-count', style={
+                                    'fontSize': '24px', 
+                                    'fontWeight': 'bold', 
+                                    'color': '#388e3c',
+                                    'marginTop': '8px'
+                                })
+                            ], style={
+                                'background': 'white',
+                                'padding': '20px',
+                                'borderRadius': '8px',
+                                'textAlign': 'center',
+                                'borderLeft': '4px solid #388e3c'
+                            })
+                        ], style={'flex': '1', 'marginLeft': '10px'})
+                    ], style={
+                        'display': 'flex',
+                        'justifyContent': 'space-between',
+                        'marginBottom': '20px'
+                    }),
+                    
+                    # Graphiques de la carte
+                    html.Div([
+                        html.Div([
+                            dcc.Graph(id='map-distribution', style={'marginBottom': '20px'})
+                        ], style={'width': '48%', 'display': 'inline-block', 'paddingRight': '2%'}),
+                        
+                        html.Div([
+                            dcc.Graph(id='map-categories', style={'marginBottom': '20px'})
+                        ], style={'width': '48%', 'display': 'inline-block', 'paddingLeft': '2%'})
+                    ]),
+                    
+                    html.Div([
+                        dcc.Graph(id='map-comparison')
+                    ], style={'marginTop': '20px'}),
+                    
+                    # Lien vers la page complète
+                    html.Div([
+                        html.Div([
+                            html.H4("📄 Rapport Complet", style={'color': '#263238', 'marginTop': '0'}),
+                            html.P("Accédez au rapport HTML complet avec toutes les visualisations interactives et les données détaillées.",
+                                  style={'color': '#666'}),
+                            html.A([
+                                html.Button("📂 Ouvrir results/critical_paths_map.html", 
+                                          style={
+                                              'padding': '12px 25px',
+                                              'backgroundColor': '#1e88e5',
+                                              'color': 'white',
+                                              'border': 'none',
+                                              'borderRadius': '6px',
+                                              'cursor': 'pointer',
+                                              'fontSize': '14px',
+                                              'fontWeight': 'bold',
+                                              'transition': 'all 0.3s'
+                                          })
+                            ], href='/results/critical_paths_map.html', target='_blank',
+                            style={'textDecoration': 'none'})
+                        ], style={
+                            'background': 'white',
+                            'padding': '20px',
+                            'borderRadius': '12px',
+                            'boxShadow': '0 2px 8px rgba(0,0,0,0.08)',
+                            'marginTop': '20px'
+                        })
+                    ])
+                ], style={'padding': '20px'})
+            ])
         ], style={
             'background': 'white',
             'borderRadius': '12px',
@@ -591,6 +741,53 @@ def update_correlation(topology):
     )
     
     return fig
+
+# ==================== CALLBACKS CARTE DES CHEMINS À RISQUE ====================
+
+@callback(
+    [Output('map-distribution', 'figure'),
+     Output('map-comparison', 'figure'),
+     Output('map-categories', 'figure'),
+     Output('map-critical-count', 'children'),
+     Output('map-moderate-count', 'children'),
+     Output('map-stable-count', 'children')],
+    Input('tabs', 'value')
+)
+def update_critical_paths_map(selected_tab):
+    """Met à jour les graphiques de la carte des chemins à risque"""
+    if selected_tab != 'tab-4' or not CRITICAL_PATHS_MAP_AVAILABLE:
+        # Retourner des graphiques vides si l'onglet n'est pas sélectionné
+        empty_fig = go.Figure()
+        empty_fig.add_annotation(text="Données non disponibles", showarrow=False)
+        return (empty_fig, empty_fig, empty_fig, "N/A", "N/A", "N/A")
+    
+    try:
+        figs = critical_paths_figures
+        
+        # Compter les chemins par catégorie
+        all_paths = []
+        for topology, paths in critical_paths.items():
+            all_paths.extend(paths)
+        
+        critical_count = sum(1 for p in all_paths if p.get('mean_risk', 0) > 0.5)
+        moderate_count = sum(1 for p in all_paths if 0.3 <= p.get('mean_risk', 0) <= 0.5)
+        stable_count = sum(1 for p in all_paths if p.get('mean_risk', 0) < 0.3)
+        
+        return (
+            figs['distribution'],
+            figs['comparison'],
+            figs['categories'],
+            str(critical_count),
+            str(moderate_count),
+            str(stable_count)
+        )
+    except Exception as e:
+        print(f"[!] Erreur lors du chargement de la carte: {e}")
+        empty_fig = go.Figure()
+        empty_fig.add_annotation(text=f"Erreur: {str(e)}", showarrow=False)
+        return (empty_fig, empty_fig, empty_fig, "Erreur", "Erreur", "Erreur")
+
+# ==================== FIN CALLBACKS CARTE DES CHEMINS À RISQUE ====================
 
 @callback(
     Output('critical-paths-table', 'children'),
