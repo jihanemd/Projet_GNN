@@ -1,0 +1,171 @@
+{
+  "timestamp": "2026-01-01T21:47:22.456014",
+  "project": "Identification des Chemins Critiques dans un Réseau",
+  "version": "2.0 - Multi-Métriques avec Validation",
+  "overview": {
+    "total_topologies": 50,
+    "total_nodes": 1290,
+    "total_edges": 1642,
+    "total_critical_paths": 120
+  },
+  "amplification_metrics": {
+    "mean": 0.061267170167000125,
+    "median": 0.059564649995051705,
+    "std": 0.00952949339969368,
+    "min": 0.0462154725875026,
+    "max": 0.0896840982906889,
+    "q1": 0.054888066561061724,
+    "q3": 0.06507997463063277
+  },
+  "max_gnn_risk": {
+    "mean": 0.6550202374192786,
+    "median": 0.6630443526452681,
+    "std": 0.0739726565216226,
+    "min": 0.4106164954984111,
+    "max": 0.7952665741719863
+  },
+  "mean_gnn_risk": {
+    "mean": 0.35734629182504757,
+    "median": 0.3552729134656819,
+    "std": 0.0340556721204074,
+    "min": 0.2853044678247768,
+    "max": 0.4532719079381604
+  },
+  "static_risk_comparison": {
+    "mean_static": 0.2960791216580474,
+    "mean_gnn": 0.35734629182504757,
+    "amplification_factor": 1.2069283704433569
+  },
+  "topology_sizes": {
+    "avg_nodes": 25.8,
+    "avg_edges": 32.84,
+    "min_nodes": 4,
+    "max_nodes": 65,
+    "min_edges": 4,
+    "max_edges": 77
+  },
+  "top_topologies": {
+    "highest_amplification": [
+      {
+        "topology": "Arpanet196912",
+        "avg_difference": 0.0896840982906889
+      },
+      {
+        "topology": "Ai3",
+        "avg_difference": 0.0821037396410056
+      },
+      {
+        "topology": "Belnet2005",
+        "avg_difference": 0.07948292302174
+      },
+      {
+        "topology": "Belnet2004",
+        "avg_difference": 0.0790629519470025
+      },
+      {
+        "topology": "Airtel",
+        "avg_difference": 0.0778733379670958
+      }
+    ],
+    "highest_max_risk": [
+      {
+        "topology": "AsnetAm",
+        "max_gnn_risk": 0.7952665741719863
+      },
+      {
+        "topology": "Airtel",
+        "max_gnn_risk": 0.7657313256774506
+      },
+      {
+        "topology": "Arpanet19728",
+        "max_gnn_risk": 0.7637427109750736
+      },
+      {
+        "topology": "BtAsiaPac",
+        "max_gnn_risk": 0.7461363234062476
+      },
+      {
+        "topology": "Aarnet",
+        "max_gnn_risk": 0.7449749410671722
+      }
+    ],
+    "highest_mean_risk": [
+      {
+        "topology": "Ai3",
+        "mean_gnn_risk": 0.4532719079381604
+      },
+      {
+        "topology": "Arpanet19706",
+        "mean_gnn_risk": 0.4452967582006851
+      },
+      {
+        "topology": "Belnet2008",
+        "mean_gnn_risk": 0.4082119051839707
+      },
+      {
+        "topology": "Cesnet2001",
+        "mean_gnn_risk": 0.4037531937708681
+      },
+      {
+        "topology": "Abilene",
+        "mean_gnn_risk": 0.4035236735521336
+      }
+    ]
+  },
+  "bottom_topologies": {
+    "lowest_amplification": [
+      {
+        "topology": "BtLatinAmerica",
+        "avg_difference": 0.0462154725875026
+      },
+      {
+        "topology": "Amres",
+        "avg_difference": 0.0481713459918173
+      },
+      {
+        "topology": "Azrena",
+        "avg_difference": 0.0482101204681506
+      },
+      {
+        "topology": "Bren",
+        "avg_difference": 0.0497516316772942
+      },
+      {
+        "topology": "Bellsouth",
+        "avg_difference": 0.0500009905070394
+      }
+    ],
+    "lowest_max_risk": [
+      {
+        "topology": "Arpanet196912",
+        "max_gnn_risk": 0.4106164954984111
+      },
+      {
+        "topology": "Cesnet1993",
+        "max_gnn_risk": 0.5075308682633337
+      },
+      {
+        "topology": "Cesnet1997",
+        "max_gnn_risk": 0.5268963059020414
+      },
+      {
+        "topology": "Cesnet1999",
+        "max_gnn_risk": 0.5447951871941754
+      },
+      {
+        "topology": "Belnet2007",
+        "max_gnn_risk": 0.5553634971206473
+      }
+    ]
+  },
+  "quality_metrics": {
+    "saturation_analysis": "0% de liens saturés (> 0.95)",
+    "discrimination_quality": "Bonne - écarts clairs entre liens critiques et normaux",
+    "model_stability": "Très stable - Std amplification: 0.0095",
+    "coherence_score": "★★★★☆ (4/5)"
+  },
+  "path_metrics": {
+    "avg_paths_per_topology": 2.4,
+    "total_unique_paths": 120
+  }
+}

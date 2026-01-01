@@ -1,0 +1,114 @@
+
+================================================================================
+RAPPORT KPI - ANALYSE DES CHEMINS CRITIQUES
+================================================================================
+
+EXÉCUTION: 2026-01-01 21:47:22
+VERSION: 2.0 - Multi-Métriques avec Validation
+
+1. OVERVIEW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Topologies analysées: 50
+  Nombre total de nœuds: 1,290
+  Nombre total de liens: 1,642
+  Chemins critiques identifiés: 120
+
+2. AMPLIFICATION (Différence GNN - Statique)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Moyenne:        0.0613
+  Médiane:        0.0596
+  Écart-type:     0.0095
+  Minimum:        0.0462
+  Maximum:        0.0897
+  Q1 (25%):       0.0549
+  Q3 (75%):       0.0651
+
+  → INTERPRÉTATION: La propagation GNN ajoute en moyenne 6.1%
+    au risque, avec une variabilité très faible (σ = 0.0095)
+
+3. RISQUE GNN MAXIMUM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Moyenne:        0.655
+  Médiane:        0.663
+  Intervalle:     [0.411, 0.795]
+
+4. RISQUE GNN MOYEN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Moyenne:        0.357
+  Médiane:        0.355
+  Intervalle:     [0.285, 0.453]
+
+5. COMPARAISON STATIQUE vs GNN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Risque Statique (moyen): 0.296
+  Risque GNN (moyen):      0.357
+  Facteur amplification:   1.21x
+
+  → INTERPRÉTATION: Le GNN amplifie 1.21 fois le risque initial
+    (propagation modérée, pas catastrophique)
+
+6. TAILLES DE TOPOLOGIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Nœuds:  4 à 65 (moy: 26)
+  Liens:  4 à 77 (moy: 33)
+
+  → INTERPRÉTATION: Couverture diverse du très petit au très grand réseau
+
+7. TOP 5 - AMPLIFICATION MAXIMUM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Arpanet196912: 0.0897
+  2. Ai3: 0.0821
+  3. Belnet2005: 0.0795
+  4. Belnet2004: 0.0791
+  5. Airtel: 0.0779
+
+8. TOP 5 - RISQUE MAXIMUM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. AsnetAm: 0.795
+  2. Airtel: 0.766
+  3. Arpanet19728: 0.764
+  4. BtAsiaPac: 0.746
+  5. Aarnet: 0.745
+
+9. QUALITÉ DU MODÈLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Saturation:         0% de liens saturés (> 0.95)
+  Discrimination:     Bonne - écarts clairs entre liens critiques et normaux
+  Stabilité:          Très stable - Std amplification: 0.0095
+  Score cohérence:    ★★★★☆ (4/5)
+
+10. MÉTRIQUES CHEMINS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Chemins critiques totaux: 120
+  Moyenne par topologie:    2.4
+
+================================================================================
+CONCLUSION
+================================================================================
+
+✅ Le modèle GNN rule-based démontre:
+   • Amplification modérée et contrôlée (~6%)
+   • Bonne discrimination entre liens critiques et normaux
+   • Stabilité exceptionnelle (faible variance)
+   • Cohérence sur 50 topologies hétérogènes
+
+⚠️  Limitations:
+   • Basé sur données synthétiques (pas validation réelle)
+   • Coefficients heuristiques (charge=0.03, centrality=0.02)
+   • Pas comparaison avec méthodes industrielles
+
+✓ RECOMMANDATION: 
+   Utilisable pour priorisation et screening, mais validation sur 
+   données réelles recommandée avant déploiement production.
+
+================================================================================

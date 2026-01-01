@@ -1,0 +1,18 @@
+# Dépendances pour le Dashboard - Chemins Critiques
+
+# Core
+dash==2.14.0
+plotly==5.17.0
+pandas==2.1.0
+numpy==1.24.0
+
+# Visualisations
+matplotlib==3.8.0
+seaborn==0.12.0
+
+# Serveur
+flask==3.0.0
+werkzeug==3.0.0
+
+# Utilitaires
+python-dateutil==2.8.2
